@@ -3,16 +3,22 @@ export const COUNTRIES = {
   "004": { tr: "Afganistan",               continent: "AS", variants: ["afganistan"] },
   "008": { tr: "Arnavutluk",               continent: "EU", variants: ["arnavutluk"] },
   "012": { tr: "Cezayir",                  continent: "AF", variants: ["cezayir"] },
+  "020": { tr: "Andorra",                  continent: "EU", variants: ["andorra"] },
   "024": { tr: "Angola",                   continent: "AF", variants: ["angola"] },
+  "028": { tr: "Antigua ve Barbuda",       continent: "NA", variants: ["antigua ve barbuda", "antigua"] },
   "031": { tr: "Azerbaycan",               continent: "AS", variants: ["azerbaycan"] },
   "032": { tr: "Arjantin",                 continent: "SA", variants: ["arjantin"] },
   "036": { tr: "Avustralya",               continent: "OC", variants: ["avustralya"] },
   "040": { tr: "Avusturya",                continent: "EU", variants: ["avusturya"] },
+  "044": { tr: "Bahamalar",               continent: "NA", variants: ["bahamalar", "bahamas"] },
   "048": { tr: "Bahreyn",                  continent: "AS", variants: ["bahreyn"] },
   "050": { tr: "Bangladeş",               continent: "AS", variants: ["bangladeş", "banglade"] },
   "051": { tr: "Ermenistan",               continent: "AS", variants: ["ermenistan"] },
+  "052": { tr: "Barbados",                 continent: "NA", variants: ["barbados"] },
   "056": { tr: "Belçika",                 continent: "EU", variants: ["belçika", "belcika"] },
   "064": { tr: "Butan",                    continent: "AS", variants: ["butan"] },
+  "084": { tr: "Belize",                   continent: "NA", variants: ["belize"] },
+  "096": { tr: "Brunei",                   continent: "AS", variants: ["brunei"] },
   "068": { tr: "Bolivya",                  continent: "SA", variants: ["bolivya"] },
   "070": { tr: "Bosna Hersek",             continent: "EU", variants: ["bosna hersek", "bosna-hersek", "bosna"] },
   "072": { tr: "Botsvana",                 continent: "AF", variants: ["botsvana", "botswana"] },
@@ -25,6 +31,7 @@ export const COUNTRIES = {
   "116": { tr: "Kamboçya",               continent: "AS", variants: ["kamboçya", "kambocya"] },
   "120": { tr: "Kamerun",                  continent: "AF", variants: ["kamerun"] },
   "124": { tr: "Kanada",                   continent: "NA", variants: ["kanada"] },
+  "132": { tr: "Cabo Verde",               continent: "AF", variants: ["cabo verde", "yeşil burun", "cape verde"] },
   "140": { tr: "Orta Afrika Cumhuriyeti",  continent: "AF", variants: ["orta afrika cumhuriyeti", "orta afrika"] },
   "144": { tr: "Sri Lanka",               continent: "AS", variants: ["sri lanka", "srilanka"] },
   "152": { tr: "Şili",                    continent: "SA", variants: ["şili", "sili", "chile"] },
@@ -32,7 +39,7 @@ export const COUNTRIES = {
   "156": { tr: "Çin",                     continent: "AS", variants: ["çin", "cin", "china"] },
   "158": { tr: "Tayvan",                  continent: "AS", variants: ["tayvan", "taiwan"] },
   "170": { tr: "Kolombiya",               continent: "SA", variants: ["kolombiya"] },
-  "174": { tr: "Mayotte",                  continent: "AF", variants: ["mayotte"] },
+  "174": { tr: "Komorlar",                 continent: "AF", variants: ["komorlar", "komor", "comoros"] },
   "178": { tr: "Kongo Cumhuriyeti",        continent: "AF", variants: ["kongo cumhuriyeti", "kongo brazzaville"] },
   "180": { tr: "Demokratik Kongo",         continent: "AF", variants: ["demokratik kongo", "kongo", "demokratik kongo cumhuriyeti", "drc", "zaire"] },
   "188": { tr: "Kosta Rika",              continent: "NA", variants: ["kosta rika", "kostarika"] },
@@ -42,6 +49,7 @@ export const COUNTRIES = {
   "203": { tr: "Çekya",                   continent: "EU", variants: ["çekya", "cekya", "çek cumhuriyeti"] },
   "204": { tr: "Benin",                    continent: "AF", variants: ["benin"] },
   "208": { tr: "Danimarka",               continent: "EU", variants: ["danimarka"] },
+  "212": { tr: "Dominika",                 continent: "NA", variants: ["dominika", "dominica"] },
   "214": { tr: "Dominik Cumhuriyeti",      continent: "NA", variants: ["dominik cumhuriyeti", "dominik"] },
   "218": { tr: "Ekvador",                  continent: "SA", variants: ["ekvador"] },
   "222": { tr: "El Salvador",              continent: "NA", variants: ["el salvador", "salvador"] },
@@ -56,13 +64,18 @@ export const COUNTRIES = {
   "266": { tr: "Gabon",                    continent: "AF", variants: ["gabon"] },
   "268": { tr: "Gürcistan",               continent: "AS", variants: ["gürcistan", "gurcistan"] },
   "270": { tr: "Gambiya",                  continent: "AF", variants: ["gambiya"] },
+  "275": { tr: "Filistin",                 continent: "AS", variants: ["filistin", "filistin devleti", "palestine"] },
   "276": { tr: "Almanya",                  continent: "EU", variants: ["almanya"] },
   "288": { tr: "Gana",                     continent: "AF", variants: ["gana"] },
   "300": { tr: "Yunanistan",               continent: "EU", variants: ["yunanistan"] },
+  "296": { tr: "Kiribati",                 continent: "OC", variants: ["kiribati"] },
   "304": { tr: "Grönland",                 continent: "NA", variants: ["grönland", "gronland", "greenland"] },
+  "308": { tr: "Grenada",                  continent: "NA", variants: ["grenada"] },
   "320": { tr: "Guatemala",                continent: "NA", variants: ["guatemala"] },
   "324": { tr: "Gine",                     continent: "AF", variants: ["gine"] },
   "328": { tr: "Guyana",                   continent: "SA", variants: ["guyana"] },
+  "332": { tr: "Haiti",                    continent: "NA", variants: ["haiti"] },
+  "336": { tr: "Vatikan",                  continent: "EU", variants: ["vatikan", "vatican"] },
   "340": { tr: "Honduras",                 continent: "NA", variants: ["honduras"] },
   "348": { tr: "Macaristan",               continent: "EU", variants: ["macaristan"] },
   "352": { tr: "İzlanda",                 continent: "EU", variants: ["izlanda", "i̇zlanda"] },
@@ -76,7 +89,6 @@ export const COUNTRIES = {
   "384": { tr: "Fildişi Sahili",         continent: "AF", variants: ["fildişi sahili", "fildisi sahili", "kot divuar"] },
   "388": { tr: "Jamaika",                  continent: "NA", variants: ["jamaika"] },
   "392": { tr: "Japonya",                  continent: "AS", variants: ["japonya"] },
-  "383": { tr: "Kosova",                   continent: "EU", variants: ["kosova", "kosovo"] },
   "398": { tr: "Kazakistan",               continent: "AS", variants: ["kazakistan"] },
   "400": { tr: "Ürdün",                   continent: "AS", variants: ["ürdün", "urdun"] },
   "404": { tr: "Kenya",                    continent: "AF", variants: ["kenya"] },
@@ -90,15 +102,19 @@ export const COUNTRIES = {
   "428": { tr: "Letonya",                  continent: "EU", variants: ["letonya"] },
   "430": { tr: "Liberya",                  continent: "AF", variants: ["liberya"] },
   "434": { tr: "Libya",                    continent: "AF", variants: ["libya"] },
+  "438": { tr: "Lihtenştayn",             continent: "EU", variants: ["lihtenştayn", "lihtenstayn", "liechtenstein"] },
   "440": { tr: "Litvanya",                 continent: "EU", variants: ["litvanya"] },
   "442": { tr: "Lüksemburg",              continent: "EU", variants: ["lüksemburg", "luksemburg"] },
   "450": { tr: "Madagaskar",               continent: "AF", variants: ["madagaskar"] },
   "454": { tr: "Malavi",                   continent: "AF", variants: ["malavi"] },
   "458": { tr: "Malezya",                  continent: "AS", variants: ["malezya"] },
+  "462": { tr: "Maldivler",               continent: "AS", variants: ["maldivler", "maldives"] },
   "466": { tr: "Mali",                     continent: "AF", variants: ["mali"] },
+  "470": { tr: "Malta",                    continent: "EU", variants: ["malta"] },
   "478": { tr: "Moritanya",               continent: "AF", variants: ["moritanya"] },
   "480": { tr: "Mauritius",               continent: "AF", variants: ["mauritius", "morityus"] },
   "484": { tr: "Meksika",                  continent: "NA", variants: ["meksika"] },
+  "492": { tr: "Monako",                   continent: "EU", variants: ["monako", "monaco"] },
   "496": { tr: "Moğolistan",             continent: "AS", variants: ["moğolistan", "mogolistan"] },
   "498": { tr: "Moldova",                  continent: "EU", variants: ["moldova"] },
   "499": { tr: "Karadağ",                continent: "EU", variants: ["karadağ", "karadag"] },
@@ -106,6 +122,7 @@ export const COUNTRIES = {
   "508": { tr: "Mozambik",                 continent: "AF", variants: ["mozambik"] },
   "512": { tr: "Umman",                    continent: "AS", variants: ["umman"] },
   "516": { tr: "Namibya",                  continent: "AF", variants: ["namibya"] },
+  "520": { tr: "Nauru",                    continent: "OC", variants: ["nauru"] },
   "524": { tr: "Nepal",                    continent: "AS", variants: ["nepal"] },
   "528": { tr: "Hollanda",                 continent: "EU", variants: ["hollanda", "netherlands"] },
   "540": { tr: "Yeni Kaledonya",           continent: "OC", variants: ["yeni kaledonya"] },
@@ -115,6 +132,9 @@ export const COUNTRIES = {
   "562": { tr: "Nijer",                    continent: "AF", variants: ["nijer"] },
   "566": { tr: "Nijerya",                  continent: "AF", variants: ["nijerya"] },
   "578": { tr: "Norveç",                  continent: "EU", variants: ["norveç", "norvec"] },
+  "583": { tr: "Mikronezya",               continent: "OC", variants: ["mikronezya", "micronesia"] },
+  "584": { tr: "Marshall Adaları",         continent: "OC", variants: ["marshall adaları", "marshall adalari"] },
+  "585": { tr: "Palau",                    continent: "OC", variants: ["palau"] },
   "586": { tr: "Pakistan",                 continent: "AS", variants: ["pakistan"] },
   "591": { tr: "Panama",                   continent: "NA", variants: ["panama"] },
   "598": { tr: "Papua Yeni Gine",          continent: "OC", variants: ["papua yeni gine", "papua"] },
@@ -124,18 +144,24 @@ export const COUNTRIES = {
   "616": { tr: "Polonya",                  continent: "EU", variants: ["polonya"] },
   "620": { tr: "Portekiz",                 continent: "EU", variants: ["portekiz"] },
   "624": { tr: "Gine-Bissau",              continent: "AF", variants: ["gine bissau", "gine-bissau"] },
+  "626": { tr: "Timor-Leste",              continent: "AS", variants: ["timor-leste", "doğu timor", "dogu timor"] },
   "630": { tr: "Porto Riko",              continent: "NA", variants: ["porto riko", "portoriko"] },
   "634": { tr: "Katar",                    continent: "AS", variants: ["katar"] },
   "638": { tr: "Réunion",                 continent: "AF", variants: ["reunion", "réunion"] },
   "642": { tr: "Romanya",                  continent: "EU", variants: ["romanya"] },
   "643": { tr: "Rusya",                    continent: "EU", variants: ["rusya"] },
   "646": { tr: "Ruanda",                   continent: "AF", variants: ["ruanda"] },
+  "659": { tr: "Saint Kitts ve Nevis",    continent: "NA", variants: ["saint kitts ve nevis", "saint kitts", "st kitts"] },
+  "662": { tr: "Saint Lucia",             continent: "NA", variants: ["saint lucia"] },
+  "670": { tr: "St. Vincent ve Grenadinler", continent: "NA", variants: ["saint vincent ve grenadinler", "saint vincent", "st vincent"] },
+  "674": { tr: "San Marino",              continent: "EU", variants: ["san marino"] },
   "678": { tr: "Sao Tome ve Principe",     continent: "AF", variants: ["sao tome", "sao tome ve principe"] },
   "682": { tr: "Suudi Arabistan",          continent: "AS", variants: ["suudi arabistan", "suudi"] },
   "686": { tr: "Senegal",                  continent: "AF", variants: ["senegal"] },
   "688": { tr: "Sırbistan",              continent: "EU", variants: ["sırbistan", "sirbistan"] },
   "690": { tr: "Seyşeller",              continent: "AF", variants: ["seyşeller", "seyseller"] },
   "694": { tr: "Sierra Leone",             continent: "AF", variants: ["sierra leone", "sierraleone"] },
+  "702": { tr: "Singapur",                 continent: "AS", variants: ["singapur", "singapore"] },
   "703": { tr: "Slovakya",                 continent: "EU", variants: ["slovakya"] },
   "704": { tr: "Vietnam",                  continent: "AS", variants: ["vietnam"] },
   "705": { tr: "Slovenya",                 continent: "EU", variants: ["slovenya"] },
@@ -153,10 +179,13 @@ export const COUNTRIES = {
   "762": { tr: "Tacikistan",               continent: "AS", variants: ["tacikistan"] },
   "764": { tr: "Tayland",                  continent: "AS", variants: ["tayland"] },
   "768": { tr: "Togo",                     continent: "AF", variants: ["togo"] },
+  "776": { tr: "Tonga",                    continent: "OC", variants: ["tonga"] },
+  "780": { tr: "Trinidad ve Tobago",       continent: "NA", variants: ["trinidad ve tobago", "trinidad"] },
   "784": { tr: "BAE",                      continent: "AS", variants: ["bae", "birleşik arap emirlikleri", "birlesik arap emirlikleri"] },
   "788": { tr: "Tunus",                    continent: "AF", variants: ["tunus"] },
   "792": { tr: "Türkiye",                 continent: "AS", variants: ["türkiye", "turkiye"] },
   "795": { tr: "Türkmenistan",            continent: "AS", variants: ["türkmenistan", "turkmenistan"] },
+  "798": { tr: "Tuvalu",                   continent: "OC", variants: ["tuvalu"] },
   "800": { tr: "Uganda",                   continent: "AF", variants: ["uganda"] },
   "804": { tr: "Ukrayna",                  continent: "EU", variants: ["ukrayna"] },
   "807": { tr: "Kuzey Makedonya",          continent: "EU", variants: ["kuzey makedonya", "makedonya"] },
@@ -168,6 +197,7 @@ export const COUNTRIES = {
   "858": { tr: "Uruguay",                  continent: "SA", variants: ["uruguay"] },
   "860": { tr: "Özbekistan",             continent: "AS", variants: ["özbekistan", "ozbekistan"] },
   "862": { tr: "Venezuela",               continent: "SA", variants: ["venezuela"] },
+  "882": { tr: "Samoa",                    continent: "OC", variants: ["samoa", "batı samoa"] },
   "887": { tr: "Yemen",                    continent: "AS", variants: ["yemen"] },
   "894": { tr: "Zambiya",                  continent: "AF", variants: ["zambiya"] },
 };
@@ -181,6 +211,11 @@ export const CONTINENTS = [
   { key: "OC", label: "Okyanusya",     color: "#06b6d4" },
 ];
 
+// Haritada numeric ID'si olmayan, sadece properties.name ile tanımlanan ülkeler
+export const NAME_COUNTRIES = {
+  "Kosovo":     { tr: "Kosova",    continent: "EU", variants: ["kosova", "kosovo"] },
+};
+
 export function normalize(str) {
   return str.trim().toLowerCase()
     .replace(/i̇/g, 'i')  // İ → i (combining dot)
@@ -192,11 +227,13 @@ export function matchCountry(input, guessed) {
   if (!norm) return null;
   for (const [code, country] of Object.entries(COUNTRIES)) {
     if (guessed.has(code)) continue;
-    if (country.variants.some(v => normalize(v) === norm)) {
-      return code;
-    }
+    if (country.variants.some(v => normalize(v) === norm)) return code;
+  }
+  for (const [name, country] of Object.entries(NAME_COUNTRIES)) {
+    if (guessed.has(name)) continue;
+    if (country.variants.some(v => normalize(v) === norm)) return name;
   }
   return null;
 }
 
-export const TOTAL_COUNTRIES = Object.keys(COUNTRIES).length;
+export const TOTAL_COUNTRIES = Object.keys(COUNTRIES).length + Object.keys(NAME_COUNTRIES).length;

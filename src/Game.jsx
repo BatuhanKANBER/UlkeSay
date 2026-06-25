@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps'
 import html2canvas from 'html2canvas'
-import { COUNTRIES, CONTINENTS, matchCountry, TOTAL_COUNTRIES } from './countries'
+import { COUNTRIES, NAME_COUNTRIES, CONTINENTS, matchCountry, TOTAL_COUNTRIES } from './countries'
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 const GAME_DURATION = 15 * 60
@@ -123,10 +123,15 @@ export default function Game({ theme, onEnd }) {
     setModalOpen(true)
   }
 
-  function getFill(geoId) {
-    const id = String(geoId).padStart(3, '0')
-    if (guessed.has(id)) return '#22c55e'
-    if (gameOver && COUNTRIES[id]) return '#ef4444'
+  function getFill(geoId, geoName) {
+    if (geoId) {
+      const id = String(geoId).padStart(3, '0')
+      if (guessed.has(id)) return '#22c55e'
+      if (gameOver && COUNTRIES[id]) return '#ef4444'
+    } else if (geoName && NAME_COUNTRIES[geoName]) {
+      if (guessed.has(geoName)) return '#22c55e'
+      if (gameOver) return '#ef4444'
+    }
     return theme === 'dark' ? '#334155' : '#cbd5e1'
   }
 
@@ -193,13 +198,15 @@ export default function Game({ theme, onEnd }) {
             <Geographies geography={GEO_URL}>
               {({ geographies }) =>
                 geographies.map(geo => {
-                  const id = String(geo.id).padStart(3, '0')
-                  const country = COUNTRIES[id]
+                  const id = geo.id ? String(geo.id).padStart(3, '0') : null
+                  const geoName = geo.properties?.name
+                  const country = (id && COUNTRIES[id]) || (geoName && NAME_COUNTRIES[geoName])
+                  const key = id || geoName
                   return (
                     <Geography
                       key={geo.rsmKey}
                       geography={geo}
-                      fill={getFill(geo.id)}
+                      fill={getFill(geo.id, geoName)}
                       stroke="#fff"
                       strokeWidth={0.5}
                       style={{
@@ -208,11 +215,11 @@ export default function Game({ theme, onEnd }) {
                         pressed: { outline: 'none' },
                       }}
                       onMouseEnter={country ? (e) => setTooltip({
-                        name: gameOver || guessed.has(id) ? country.tr : '?',
+                        name: gameOver || guessed.has(key) ? country.tr : '?',
                         x: e.clientX,
                         y: e.clientY,
-                        isGuessed: guessed.has(id),
-                        isMissed: gameOver && !guessed.has(id),
+                        isGuessed: guessed.has(key),
+                        isMissed: gameOver && !guessed.has(key),
                       }) : undefined}
                       onMouseMove={country ? (e) => setTooltip(t => t ? { ...t, x: e.clientX, y: e.clientY } : t) : undefined}
                       onMouseLeave={country ? () => setTooltip(null) : undefined}
@@ -269,16 +276,18 @@ function ContinentLists({ guessed, gameOver }) {
   CONTINENTS.forEach(c => { byContinent[c.key] = [] })
 
   for (const code of guessed) {
-    const country = COUNTRIES[code]
+    const country = COUNTRIES[code] || NAME_COUNTRIES[code]
     if (country) byContinent[country.continent].push(country.tr)
   }
 
-  // When game over, also show missed countries (greyed out)
   const missedByContinent = {}
   CONTINENTS.forEach(c => { missedByContinent[c.key] = [] })
   if (gameOver) {
     for (const [code, country] of Object.entries(COUNTRIES)) {
       if (!guessed.has(code)) missedByContinent[country.continent].push(country.tr)
+    }
+    for (const [name, country] of Object.entries(NAME_COUNTRIES)) {
+      if (!guessed.has(name)) missedByContinent[country.continent].push(country.tr)
     }
   }
 
@@ -289,7 +298,9 @@ function ContinentLists({ guessed, gameOver }) {
 
   const totalPerContinent = {}
   CONTINENTS.forEach(c => {
-    totalPerContinent[c.key] = Object.values(COUNTRIES).filter(co => co.continent === c.key).length
+    totalPerContinent[c.key] =
+      Object.values(COUNTRIES).filter(co => co.continent === c.key).length +
+      Object.values(NAME_COUNTRIES).filter(co => co.continent === c.key).length
   })
 
   return (
