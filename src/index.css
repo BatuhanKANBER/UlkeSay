@@ -499,12 +499,14 @@ body {
 }
 
 .country-item {
-  padding: 2px 10px;
+  padding: 0 10px;
   font-size: 0.78rem;
-  line-height: 1.6;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 20px;
+  line-height: 20px;
+  flex-shrink: 0;
 }
 
 .country-item.found {
@@ -515,7 +517,12 @@ body {
 
 .country-item.missed {
   color: var(--red);
-  opacity: 0.7;
+  opacity: 0.8;
+}
+
+.country-item.empty {
+  border-bottom: 1px dashed var(--border);
+  opacity: 0.4;
 }
 
 @keyframes fadeIn {

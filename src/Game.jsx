@@ -271,58 +271,45 @@ export default function Game({ theme, onEnd }) {
 }
 
 function ContinentLists({ guessed, gameOver }) {
-  // Build a map: continent -> sorted list of guessed country names
-  const byContinent = {}
-  CONTINENTS.forEach(c => { byContinent[c.key] = [] })
+  // Tüm ülkeleri kıtaya göre grupla ve alfabetik sırala
+  const allByContinent = {}
+  CONTINENTS.forEach(c => { allByContinent[c.key] = [] })
 
-  for (const code of guessed) {
-    const country = COUNTRIES[code] || NAME_COUNTRIES[code]
-    if (country) byContinent[country.continent].push(country.tr)
+  for (const [code, country] of Object.entries(COUNTRIES)) {
+    allByContinent[country.continent].push({ code, tr: country.tr })
   }
-
-  const missedByContinent = {}
-  CONTINENTS.forEach(c => { missedByContinent[c.key] = [] })
-  if (gameOver) {
-    for (const [code, country] of Object.entries(COUNTRIES)) {
-      if (!guessed.has(code)) missedByContinent[country.continent].push(country.tr)
-    }
-    for (const [name, country] of Object.entries(NAME_COUNTRIES)) {
-      if (!guessed.has(name)) missedByContinent[country.continent].push(country.tr)
-    }
+  for (const [name, country] of Object.entries(NAME_COUNTRIES)) {
+    allByContinent[country.continent].push({ code: name, tr: country.tr })
   }
-
   CONTINENTS.forEach(c => {
-    byContinent[c.key].sort((a, b) => a.localeCompare(b, 'tr'))
-    missedByContinent[c.key]?.sort((a, b) => a.localeCompare(b, 'tr'))
-  })
-
-  const totalPerContinent = {}
-  CONTINENTS.forEach(c => {
-    totalPerContinent[c.key] =
-      Object.values(COUNTRIES).filter(co => co.continent === c.key).length +
-      Object.values(NAME_COUNTRIES).filter(co => co.continent === c.key).length
+    allByContinent[c.key].sort((a, b) => a.tr.localeCompare(b.tr, 'tr'))
   })
 
   return (
     <div className="continent-panel">
-      {CONTINENTS.map(cont => (
-        <div key={cont.key} className="continent-col">
-          <div className="continent-header" style={{ borderColor: cont.color }}>
-            <span className="continent-name" style={{ color: cont.color }}>{cont.label}</span>
-            <span className="continent-count">
-              {byContinent[cont.key].length}/{totalPerContinent[cont.key]}
-            </span>
+      {CONTINENTS.map(cont => {
+        const all = allByContinent[cont.key]
+        const found = all.filter(c => guessed.has(c.code)).length
+        return (
+          <div key={cont.key} className="continent-col">
+            <div className="continent-header" style={{ borderColor: cont.color }}>
+              <span className="continent-name" style={{ color: cont.color }}>{cont.label}</span>
+              <span className="continent-count">{found}/{all.length}</span>
+            </div>
+            <ul className="continent-list">
+              {all.map(({ code, tr }) => {
+                const isFound = guessed.has(code)
+                const isMissed = gameOver && !isFound
+                return (
+                  <li key={code} className={`country-item ${isFound ? 'found' : isMissed ? 'missed' : 'empty'}`}>
+                    {isFound || isMissed ? tr : ''}
+                  </li>
+                )
+              })}
+            </ul>
           </div>
-          <ul className="continent-list">
-            {byContinent[cont.key].map(name => (
-              <li key={name} className="country-item found">{name}</li>
-            ))}
-            {gameOver && missedByContinent[cont.key].map(name => (
-              <li key={name} className="country-item missed">{name}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
