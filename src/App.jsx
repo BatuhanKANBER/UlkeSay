@@ -28,7 +28,7 @@ export default function App() {
         <Menu onStart={handleStart} theme={theme} setTheme={setTheme} />
       )}
       {screen === 'game' && (
-        <Game theme={theme} onEnd={handleGameEnd} />
+        <Game theme={theme} onEnd={handleGameEnd} nickname={nickname} />
       )}
     </div>
   )

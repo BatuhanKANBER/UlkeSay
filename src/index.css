@@ -316,15 +316,15 @@ body {
 
 .stat-value.count { color: var(--green); }
 
-.game-input-wrap {
+.game-input-row {
   display: flex;
   align-items: center;
   gap: 8px;
   flex: 1;
-  max-width: 360px;
+  max-width: 420px;
 }
 
-.game-input-wrap .input-field {
+.game-input-row .input-field {
   flex: 1;
 }
 
@@ -547,6 +547,110 @@ body {
 
 .map-tooltip.guessed { background: #15803d; }
 .map-tooltip.missed  { background: #b91c1c; }
+
+/* ─── CONTINENT WRAPPER & TOGGLE ─── */
+.continent-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.continent-toggle-btn {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--surface2);
+  border: none;
+  border-top: 2px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.continent-toggle-btn:hover {
+  background: var(--border);
+}
+
+.toggle-arrow {
+  font-size: 0.9rem;
+}
+
+/* ─── RESPONSIVE / MOBILE ─── */
+@media (max-width: 640px) {
+  .menu-card {
+    padding: 24px 20px;
+  }
+
+  .menu-title {
+    font-size: 1.5rem;
+  }
+
+  .result-card {
+    padding: 24px 20px;
+  }
+
+  .result-score {
+    font-size: 2.8rem;
+  }
+
+  .game-topbar {
+    flex-wrap: wrap;
+    padding: 8px 12px;
+    gap: 6px 12px;
+  }
+
+  .game-stats {
+    flex: 1;
+    gap: 14px;
+  }
+
+  .stat-value {
+    font-size: 1.15rem;
+  }
+
+  .topbar-actions {
+    margin-left: 0;
+    flex-shrink: 0;
+  }
+
+  .btn-outline {
+    padding: 7px 10px;
+    font-size: 0.78rem;
+  }
+
+  .game-input-row {
+    order: 10;
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+  }
+
+  .btn-danger {
+    font-size: 0.82rem;
+    padding: 9px 12px;
+    white-space: nowrap;
+  }
+
+  .continent-toggle-btn {
+    display: flex;
+  }
+
+  .panel-closed .continent-panel {
+    display: none;
+  }
+
+  .continent-panel {
+    height: 160px;
+  }
+
+  .continent-col {
+    min-width: 110px;
+  }
+}
 
 /* ─── MAP SVG ─── */
 .rsm-geographies path {

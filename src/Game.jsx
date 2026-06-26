@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps'
-import html2canvas from 'html2canvas'
 import { COUNTRIES, NAME_COUNTRIES, CONTINENTS, matchCountry, TOTAL_COUNTRIES } from './countries'
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 const GAME_DURATION = 15 * 60
 
-export default function Game({ theme, onEnd }) {
+export default function Game({ theme, onEnd, nickname }) {
   const [guessed, setGuessed] = useState(new Set())
   const [input, setInput] = useState('')
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION)
@@ -16,8 +15,8 @@ export default function Game({ theme, onEnd }) {
   const [modalOpen, setModalOpen] = useState(true)
   const [tooltip, setTooltip] = useState(null) // { name, x, y, guessed }
   const [sharing, setSharing] = useState(false)
+  const [panelOpen, setPanelOpen] = useState(true)
   const inputRef = useRef(null)
-  const mapRef = useRef(null)
   const total = TOTAL_COUNTRIES
 
   useEffect(() => {
@@ -62,56 +61,62 @@ export default function Game({ theme, onEnd }) {
     }
   }, [guessed])
 
-  async function handleShare() {
-    if (!mapRef.current || sharing) return
+  async function handleSave() {
+    if (sharing) return
     setSharing(true)
     try {
-      const canvas = await html2canvas(mapRef.current, {
-        useCORS: true,
-        backgroundColor: theme === 'dark' ? '#0f172a' : '#f0f4f8',
-        scale: 2,
-      })
-
-      // Score overlay — tüm değerler canvas scale'iyle orantılı
-      const ctx = canvas.getContext('2d')
-      const w = canvas.width
-      const h = canvas.height
-      const s = 2 // html2canvas scale
       const pct = Math.round((guessed.size / total) * 100)
+      const W = 800, H = 420, s = 2
 
-      const pillW = 360 * s
-      const pillH = 90 * s
-      const pillX = (w - pillW) / 2
-      const pillY = h - pillH - 28 * s
+      const canvas = document.createElement('canvas')
+      canvas.width = W * s
+      canvas.height = H * s
+      const ctx = canvas.getContext('2d')
+      ctx.scale(s, s)
 
-      ctx.fillStyle = 'rgba(0,0,0,0.62)'
-      roundRect(ctx, pillX, pillY, pillW, pillH, 18 * s)
+      // Arka plan
+      const grad = ctx.createLinearGradient(0, 0, W, H)
+      grad.addColorStop(0, '#1e3a8a')
+      grad.addColorStop(1, '#2563eb')
+      ctx.fillStyle = grad
+      roundRect(ctx, 0, 0, W, H, 0)
+      ctx.fill()
+
+      // İç kart (hafif)
+      ctx.fillStyle = 'rgba(255,255,255,0.07)'
+      roundRect(ctx, 36, 36, W - 72, H - 72, 20)
       ctx.fill()
 
       ctx.textAlign = 'center'
-      ctx.fillStyle = '#ffffff'
-      ctx.font = `900 ${34 * s}px "Segoe UI", system-ui, sans-serif`
-      ctx.fillText(`${guessed.size} / ${total}`, w / 2, pillY + 46 * s)
+      const cx = W / 2
 
-      ctx.font = `600 ${15 * s}px "Segoe UI", system-ui, sans-serif`
-      ctx.fillStyle = 'rgba(255,255,255,0.8)'
-      ctx.fillText(`%${pct} başarı  ·  🌍 Ülke Say`, w / 2, pillY + 72 * s)
+      // Branding
+      ctx.font = '600 17px "Segoe UI", system-ui, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.5)'
+      ctx.fillText('🌍 Ülke Say', cx, 84)
+
+      // Kullanıcı adı
+      ctx.font = '700 34px "Segoe UI", system-ui, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.88)'
+      ctx.fillText(nickname, cx, 158)
+
+      // Skor
+      ctx.font = '900 92px "Segoe UI", system-ui, sans-serif'
+      ctx.fillStyle = '#ffffff'
+      ctx.fillText(`${guessed.size} / ${total}`, cx, 282)
+
+      // Yüzde
+      ctx.font = '600 26px "Segoe UI", system-ui, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.68)'
+      ctx.fillText(`%${pct} başarı`, cx, 342)
 
       const blob = await new Promise(res => canvas.toBlob(res, 'image/png'))
-      if (navigator.share && navigator.canShare?.({ files: [new File([blob], 'ulkesay.png', { type: 'image/png' })] })) {
-        await navigator.share({
-          files: [new File([blob], 'ulkesay.png', { type: 'image/png' })],
-          title: 'Ülke Say',
-          text: `${guessed.size}/${total} ülke buldum! 🌍`,
-        })
-      } else {
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `ulkesay-${guessed.size}-${total}.png`
-        a.click()
-        URL.revokeObjectURL(url)
-      }
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `ulkesay-${nickname}-${guessed.size}.png`
+      a.click()
+      URL.revokeObjectURL(url)
     } finally {
       setSharing(false)
     }
@@ -159,7 +164,7 @@ export default function Game({ theme, onEnd }) {
         </div>
 
         {!gameOver && (
-          <div className="game-input-wrap">
+          <div className="game-input-row">
             <input
               ref={inputRef}
               className={`input-field ${flash ? 'correct-flash' : ''}`}
@@ -169,13 +174,10 @@ export default function Game({ theme, onEnd }) {
               autoComplete="off"
               spellCheck={false}
             />
+            <button className="btn btn-danger" onClick={handleGiveUp}>
+              🏳️ Pes Et
+            </button>
           </div>
-        )}
-
-        {!gameOver && (
-          <button className="btn btn-danger" onClick={handleGiveUp}>
-            🏳️ Pes Et
-          </button>
         )}
 
         <div className="topbar-actions">
@@ -189,7 +191,7 @@ export default function Game({ theme, onEnd }) {
       </div>
 
       {/* Map */}
-      <div className="map-container" ref={mapRef}>
+      <div className="map-container">
         <ComposableMap
           projectionConfig={{ scale: 147, center: [0, 10] }}
           style={{ width: '100%', height: '100%', flex: 1 }}
@@ -242,7 +244,13 @@ export default function Game({ theme, onEnd }) {
       </div>
 
       {/* Continent lists */}
-      <ContinentLists guessed={guessed} gameOver={gameOver} />
+      <div className={`continent-wrapper${panelOpen ? '' : ' panel-closed'}`}>
+        <button className="continent-toggle-btn" onClick={() => setPanelOpen(p => !p)}>
+          <span>Kıtalar</span>
+          <span className="toggle-arrow">{panelOpen ? '▾' : '▴'}</span>
+        </button>
+        <ContinentLists guessed={guessed} gameOver={gameOver} />
+      </div>
 
       {/* Result overlay */}
       {gameOver && modalOpen && (
@@ -256,8 +264,8 @@ export default function Game({ theme, onEnd }) {
               {getMedalText(guessed.size, total)}
             </div>
             <div className="result-btn-row">
-              <button className="btn btn-primary" onClick={handleShare} disabled={sharing}>
-                {sharing ? '⏳ Hazırlanıyor...' : '📷 Paylaş / İndir'}
+              <button className="btn btn-primary" onClick={handleSave} disabled={sharing}>
+                {sharing ? '⏳ Hazırlanıyor...' : '🏅 Başarımı Kaydet'}
               </button>
             </div>
             <p style={{ fontSize: '0.78rem', color: 'var(--text2)' }}>
