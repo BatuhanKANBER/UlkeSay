@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { TOTAL_COUNTRIES } from './countries'
 
+function formatTime(s) {
+  const m = Math.floor(s / 60).toString().padStart(2, '0')
+  const sec = (s % 60).toString().padStart(2, '0')
+  return `${m}:${sec}`
+}
+
 export default function Menu({ onStart, theme, setTheme }) {
   const [nick, setNick] = useState('')
   const scores = JSON.parse(localStorage.getItem('ulkesay-scores') || '[]')
@@ -57,6 +63,7 @@ export default function Menu({ onStart, theme, setTheme }) {
                 <th>Kullanıcı</th>
                 <th>Skor</th>
                 <th>Oran</th>
+                <th>Süre</th>
                 <th>Tarih</th>
               </tr>
             </thead>
@@ -71,6 +78,9 @@ export default function Menu({ onStart, theme, setTheme }) {
                   <td style={{ fontWeight: 600 }}>{s.nick}</td>
                   <td>{s.score}/{s.total}</td>
                   <td><span className="score-pct">%{s.pct}</span></td>
+                  <td style={{ color: 'var(--text2)', fontSize: '0.8rem' }}>
+                    {s.completed ? `⏱️ ${formatTime(s.completionTime)}` : '-'}
+                  </td>
                   <td style={{ color: 'var(--text2)', fontSize: '0.8rem' }}>{s.date}</td>
                 </tr>
               ))}

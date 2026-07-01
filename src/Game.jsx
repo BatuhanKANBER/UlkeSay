@@ -4,6 +4,7 @@ import { COUNTRIES, NAME_COUNTRIES, CONTINENTS, matchCountry, TOTAL_COUNTRIES } 
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 const GAME_DURATION = 15 * 60
+const MAX_PAUSES = 3
 
 export default function Game({ theme, onEnd, nickname }) {
   const [guessed, setGuessed] = useState(new Set())
@@ -12,15 +13,22 @@ export default function Game({ theme, onEnd, nickname }) {
   const [flash, setFlash] = useState(false)
   const [gameOver, setGameOver] = useState(false)
   const [giveUp, setGiveUp] = useState(false)
+  const [completed, setCompleted] = useState(false)
+  const [completionTime, setCompletionTime] = useState(null)
+  const [paused, setPaused] = useState(false)
+  const [pausesLeft, setPausesLeft] = useState(MAX_PAUSES)
   const [modalOpen, setModalOpen] = useState(true)
   const [tooltip, setTooltip] = useState(null) // { name, x, y, guessed }
   const [sharing, setSharing] = useState(false)
   const [panelOpen, setPanelOpen] = useState(true)
   const inputRef = useRef(null)
+  const timeLeftRef = useRef(GAME_DURATION)
   const total = TOTAL_COUNTRIES
 
+  useEffect(() => { timeLeftRef.current = timeLeft }, [timeLeft])
+
   useEffect(() => {
-    if (gameOver) return
+    if (gameOver || paused) return
     const id = setInterval(() => {
       setTimeLeft(t => {
         if (t <= 1) { clearInterval(id); setGameOver(true); return 0 }
@@ -28,9 +36,9 @@ export default function Game({ theme, onEnd, nickname }) {
       })
     }, 1000)
     return () => clearInterval(id)
-  }, [gameOver])
+  }, [gameOver, paused])
 
-  useEffect(() => { inputRef.current?.focus() }, [])
+  useEffect(() => { if (!paused) inputRef.current?.focus() }, [paused])
 
   function reset() {
     setGuessed(new Set())
@@ -39,6 +47,10 @@ export default function Game({ theme, onEnd, nickname }) {
     setFlash(false)
     setGameOver(false)
     setGiveUp(false)
+    setCompleted(false)
+    setCompletionTime(null)
+    setPaused(false)
+    setPausesLeft(MAX_PAUSES)
     setModalOpen(true)
     setTimeout(() => inputRef.current?.focus(), 50)
   }
@@ -54,12 +66,21 @@ export default function Game({ theme, onEnd, nickname }) {
     setInput(val)
     const code = matchCountry(val, guessed)
     if (code) {
-      setGuessed(prev => new Set([...prev, code]))
+      setGuessed(prev => {
+        const next = new Set([...prev, code])
+        if (next.size === total) {
+          setCompleted(true)
+          setCompletionTime(GAME_DURATION - timeLeftRef.current)
+          setGameOver(true)
+          setModalOpen(true)
+        }
+        return next
+      })
       setInput('')
       setFlash(true)
       setTimeout(() => setFlash(false), 400)
     }
-  }, [guessed])
+  }, [guessed, total])
 
   async function handleSave() {
     if (sharing) return
@@ -128,6 +149,17 @@ export default function Game({ theme, onEnd, nickname }) {
     setModalOpen(true)
   }
 
+  function togglePause() {
+    if (gameOver) return
+    if (paused) {
+      setPaused(false)
+    } else {
+      if (pausesLeft <= 0) return
+      setPausesLeft(p => p - 1)
+      setPaused(true)
+    }
+  }
+
   function getFill(geoId, geoName) {
     if (geoId) {
       const id = String(geoId).padStart(3, '0')
@@ -168,13 +200,22 @@ export default function Game({ theme, onEnd, nickname }) {
             <input
               ref={inputRef}
               className={`input-field ${flash ? 'correct-flash' : ''}`}
-              placeholder="Ülke adı gir..."
+              placeholder={paused ? 'Oyun duraklatıldı...' : 'Ülke adı gir...'}
               value={input}
               onChange={handleInput}
+              disabled={paused}
               autoComplete="off"
               spellCheck={false}
             />
-            <button className="btn btn-danger" onClick={handleGiveUp}>
+            <button
+              className="btn btn-outline"
+              onClick={togglePause}
+              disabled={!paused && pausesLeft <= 0}
+              title={paused ? 'Oyuna devam et' : `Oyunu duraklat (${pausesLeft} hak kaldı)`}
+            >
+              {paused ? '▶️ Devam Et' : `⏸️ Duraklat (${pausesLeft})`}
+            </button>
+            <button className="btn btn-danger" onClick={handleGiveUp} disabled={paused}>
               🏳️ Pes Et
             </button>
           </div>
@@ -184,7 +225,7 @@ export default function Game({ theme, onEnd, nickname }) {
           <button className="btn btn-outline" onClick={reset} title="Oyunu sıfırla">
             ↺ Sıfırla
           </button>
-          <button className="btn btn-outline" onClick={() => onEnd(guessed.size, total)} title="Ana menüye dön">
+          <button className="btn btn-outline" onClick={() => onEnd(guessed.size, total, completed, completionTime)} title="Ana menüye dön">
             ⌂ Ana Menü
           </button>
         </div>
@@ -252,14 +293,38 @@ export default function Game({ theme, onEnd, nickname }) {
         <ContinentLists guessed={guessed} gameOver={gameOver} />
       </div>
 
+      {/* Pause overlay */}
+      {paused && !gameOver && (
+        <div className="result-overlay">
+          <div className="result-card">
+            <div className="result-title">⏸️ Oyun Duraklatıldı</div>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text2)' }}>
+              Kalan duraklatma hakkın: {pausesLeft}/{MAX_PAUSES}
+            </p>
+            <div className="result-btn-row">
+              <button className="btn btn-primary" onClick={togglePause}>
+                ▶️ Devam Et
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Result overlay */}
       {gameOver && modalOpen && (
         <div className="result-overlay" onClick={e => e.target === e.currentTarget && setModalOpen(false)}>
           <div className="result-card">
             <button className="modal-close" onClick={() => setModalOpen(false)}>✕</button>
-            <div className="result-title">{giveUp ? '🏳️ Pes Ettin' : '⏰ Süre Doldu!'}</div>
+            <div className="result-title">
+              {completed ? '🎉 Tüm Ülkeler Bulundu!' : giveUp ? '🏳️ Pes Ettin' : '⏰ Süre Doldu!'}
+            </div>
             <div className="result-score">{guessed.size}/{total}</div>
             <div className="result-pct">%{Math.round((guessed.size / total) * 100)} ülke bulundu</div>
+            {completed && (
+              <div className="result-pct" style={{ color: 'var(--accent)' }}>
+                ⏱️ Tamamlama süresi: {formatTime(completionTime)}
+              </div>
+            )}
             <div style={{ fontSize: '0.85rem', color: 'var(--text2)', lineHeight: 1.6 }}>
               {getMedalText(guessed.size, total)}
             </div>

@@ -17,8 +17,8 @@ export default function App() {
     setScreen('game')
   }
 
-  function handleGameEnd(score, total) {
-    saveScore(nickname, score, total)
+  function handleGameEnd(score, total, completed, completionTime) {
+    saveScore(nickname, score, total, completed, completionTime)
     setScreen('menu')
   }
 
@@ -34,11 +34,19 @@ export default function App() {
   )
 }
 
-function saveScore(nick, score, total) {
+function saveScore(nick, score, total, completed, completionTime) {
   const key = 'ulkesay-scores'
   const existing = JSON.parse(localStorage.getItem(key) || '[]')
   const pct = Math.round((score / total) * 100)
-  existing.push({ nick, score, total, pct, date: new Date().toLocaleDateString('tr-TR') })
-  existing.sort((a, b) => b.pct - a.pct || b.score - a.score)
+  existing.push({
+    nick, score, total, pct,
+    completed: !!completed,
+    completionTime: completed ? completionTime : null,
+    date: new Date().toLocaleDateString('tr-TR'),
+  })
+  existing.sort((a, b) =>
+    b.pct - a.pct ||
+    (a.completed && b.completed ? a.completionTime - b.completionTime : b.score - a.score)
+  )
   localStorage.setItem(key, JSON.stringify(existing.slice(0, 10)))
 }
